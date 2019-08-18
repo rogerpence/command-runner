@@ -21,6 +21,16 @@ Over time, through, I brewed myself a righteous mess with these special-case Bas
 
 > command-runner was written to run on Ubuntu. I think it would work on the Mac and Windows, but it hasn't been tested there.     
 
+## Why don't you just use Bash aliases?
+
+I do use Bash aliases in some cases. But for development work, Bash aliases: 
+
+* impose too much friction (you need to source the profile file after changing it) 
+
+* you can't have project-specific Bash aliases
+
+* Bash aliases don't expose themselves easily. command-runner's help panel quickly shows you the commands available 
+
 
 ## How command-runner works
 
@@ -80,6 +90,14 @@ where `command` is a command defined in one of the two command definition files.
 * the optional `--dry-run` flag shows the command line that would be run
 
 * optional `--help` flag (or no arguments) shows a little help panel and command list.
+
+![command-runner help panel](https://rogerpence.com/storage/images/cr-help.2458714.65639.png?1)
+
+<small>command-runner's help panel/command list</small>
+
+![command-runner dry run](https://rogerpence.com/storage/images/cr-dry-run.2458714.65624.png?1)
+
+<small>command-runner's --dry-run to show what command would be submitted</small>
     
 ## Beware using command lines with redirection
 
