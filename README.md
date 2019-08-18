@@ -109,9 +109,9 @@ To install command-runner:
 1. Make cr executable with:
    - sudo chmod +x /usr/local/bin/cr
 
-I use command-runner mostly on my host machine. But because it's a simple, single Python script it also easy to install into your VM's or Docker images. 
+I use command-runner mostly on my host machine. But because it's a simple, single Python script it's also easy to install into your VMs or Docker images. 
 
-# Todo
+## Todo
 
 * Show warnings when loading a subsquent command definition file overwrites previous command definitions. 
 
