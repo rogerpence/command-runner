@@ -2,7 +2,7 @@
 
 #   command-runner 
 #   by Roger Pence
-version = 'v 1.0.0'
+version = 'v 1.0.1'
 #   August 18, 2019
 #   
 #   Permission is hereby granted, free of charge, to any person obtaining 
@@ -81,7 +81,11 @@ def add_cmdline_args(command_line):
 
 def get_actual_command(command):
     if 'alias' in cmds[command]:
-        return cmds[command]['alias']        
+        alias_command = cmds[command]['alias']
+        if not alias_command in cmds: 
+            print(colored(F'aliased command \'{alias_command}\' is not defined.', 'red'))
+            exit(1)
+        return alias_command
     else:        
         return command
 

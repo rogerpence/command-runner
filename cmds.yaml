@@ -43,7 +43,7 @@ up-remote:
 upl:
   alias: up-local
 upr:
-  alias: up-remote
+  alias: up-remotex
 yarn:
   cmd: docker-compose run --rm node yarn {{args}}
   msg: Starting yarn
