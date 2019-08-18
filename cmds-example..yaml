@@ -1,0 +1,15 @@
+---
+git-init:
+  cmd: git init && git cm 'Initial commit'
+  msg: Create git repo and make initial commit
+  # This uses Phil Haack's cm git alias.
+  # https://haacked.com/archive/2014/07/28/github-flow-aliases/
+show-path:
+  cmd: echo $PATH | tr ":" "\n" | nl
+  msg: Show Ubuntu path as a list
+git-status:
+  cmd: git status  
+  msg: 
+myls: 
+  cmd: ls {{args}}
+  msg: Silly exmaple to show args.         

@@ -1,0 +1,49 @@
+---
+artisan:
+  cmd: docker-compose -w /var/www/html app php artisan {{args}}
+  msg: Starting Artisan
+bash:
+  cmd: docker-compose exec -u www-data:www-data -w /var/www/html app bash
+  msg: Starting Bash as user (must use 'up' first)
+bash-root:
+  cmd: docker-compose exec -w /var/www/html app bash
+  msg: Starting Bash as user (must use 'up first')
+build-image:
+  cmd: docker build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id
+    -g ${USER}) -t rp:laravel -f ./app-dockerfile .
+  msg: Build image
+composer:
+  cmd: docker-compose exec -u www-data:www-data -w /var/www/html app composer {{args}}
+  msg: Starting Composer
+down:
+  cmd: docker-compose down
+  msg: Stopping containers
+laravel-version:
+  cmd: docker-compose exec -u www-data:www-data -w /var/www/html app php artisan --version
+  msg: Show Laravel version
+npm:
+  cmd: docker-compose run --rm node npm {{args}}
+  msg: Starting npm
+phpunit:
+  cmd: docker-compose -w /var/www/html app ./vendor/bin/phpunit {{args}}
+  msg: Starting PHPUnit
+pu:
+  alias: phpunit
+tinker:
+  cmd: docker-compose exec -u www-data:www-data -w /var/www/html app php artisan tinker
+  msg: Starting Tinker
+up:
+  alias: up-local
+up-local:
+  cmd: docker-compose -f docker-compose.yml up -d
+  msg: Starting with local debug
+up-remote:
+  cmd: docker-compose -f docker-compose.yml -f docker-compose-remote-debug.yml up -d
+  msg: Starting with remote debug
+upl:
+  alias: up-local
+upr:
+  alias: up-remote
+yarn:
+  cmd: docker-compose run --rm node yarn {{args}}
+  msg: Starting yarn
