@@ -77,7 +77,7 @@ command-runner recogizes two YAML command definition files:
 
     Any commands present in this local that are also present in the global file will overwrite those from the global file (a future version of command-runner will show what commands got overwritten). `cmds.yaml` is intended to be project-specific. I frequently copy the included `laravel-docker.yaml` file (as `cmds.yaml`) into a Laravel project. Once there, I can tweak its settings so that they are specific to that project. 
     
-At least one of these files must be present for command-runner to run. There are a couple of sample YAML files included in this project. When I'm using command-runner with Docker-based projects, I usually put the `cmd.yaml` file in the same folder as the projects's Docker files.     
+At least one of these files must be present for command-runner to run. There are a couple of sample YAML files included in this project.      
 
 ## command-runner's command line
 
