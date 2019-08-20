@@ -151,7 +151,6 @@ def show_help():
 
 def get_commands():
     home_path = str(Path.home())    
-    print(home_path)
 
     if os.path.isfile('cmds.yaml'):
         local_cmds = load_commands('cmds.yaml')
