@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 #   command-runner 
 #   by Roger Pence
-version = 'v 1.0.1'
+version = 'v 1.0.2'
 #   August 18, 2019
  
 # Copyright 2019 by Roger Pence. All rights reserved.
@@ -17,7 +17,7 @@ version = 'v 1.0.1'
 # * The above copyright notice and this permission notice shall be included in all
 #   copies or substantial portions of the Software.
 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
 # FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
 # OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY
@@ -39,8 +39,18 @@ import subprocess
 import sys  
 import yaml
 import os
-from termcolor import colored
+from termcolor import colored, cprint
 from pathlib import Path
+
+# --------------------------------------------
+# Windows-only code.
+# --------------------------------------------
+# termcolor needs colorama to work on Windows. 
+# Be sure to get the colorama module with: 
+# pip3 install colorama
+if os.name == 'nt':
+    import colorama
+    colorama.init() 
 
 def exit_with_error(error_message):
     print(error_message)
@@ -48,14 +58,15 @@ def exit_with_error(error_message):
 
 def load_commands(file_name):
     if not os.path.isfile(file_name):
-        exit_with_error(f"Error: {file_name} file not found.")
+        exit_with_error(f'Error: {file_name} file not found.')
+
     else:        
         with open(file_name, 'r') as f:
             try:
                 cmds = yaml.safe_load(f)
             except yaml.YAMLError as exc:
-                print(colored('An error occurred parsing the configuration file.', 'red'))
-                print(colored('The following error should help to location where in the the file the error occurred.', 'red'))
+                cprint('An error occurred parsing the configuration file.', 'red')
+                cprint('The following error should help to location where in the the file the error occurred.', 'red')
                 print(exc)                
                 exit(1)
             return cmds
@@ -92,7 +103,7 @@ def get_actual_command(command):
     if 'alias' in cmds[command]:
         alias_command = cmds[command]['alias']
         if not alias_command in cmds: 
-            print(colored(F'aliased command \'{alias_command}\' is not defined.', 'red'))
+            cprint(F'aliased command \'{alias_command}\' is not defined.', 'red')
             exit(1)
         return alias_command
     else:        
@@ -123,7 +134,7 @@ def show_help():
 
     for key in cmds:
         command = pad_command_with_trailing_blanks(key, max_key_len)
-        command = colored(colored(command, 'blue'))            
+        command = colored(command, 'blue')            
         if 'alias' in cmds[key]:            
             alias = cmds[key]['alias']
             text = colored(alias, 'blue')
@@ -140,12 +151,16 @@ def show_help():
 
 def get_commands():
     home_path = str(Path.home())    
+    print(home_path)
 
     if os.path.isfile('cmds.yaml'):
         local_cmds = load_commands('cmds.yaml')
 
-    if os.path.isfile(f"{home_path}/global-commands.yaml"):
-        global_cmds = load_commands(f"{home_path}/global-commands.yaml")
+    global_commands_file_name = os.path.join(home_path, 'global-commands.yaml')
+    print('---' + global_commands_file_name)
+
+    if os.path.isfile(global_commands_file_name):
+        global_cmds = load_commands(global_commands_file_name)
 
     if 'local_cmds' in locals() and 'global_cmds' in locals():
         cmds = {**global_cmds, **local_cmds}
@@ -160,7 +175,7 @@ def get_commands():
         return cmds
 
     if not 'local_cmds' in locals() and not 'global_cmds' in locals():
-        print(f"{home_path}/global-commands.yaml or ./cmds.yaml not found.")
+        print(f"'{global_commands_file_name}' or local 'cmds.yaml' not found.")
         exit(1)
     
 def main():       
@@ -173,7 +188,7 @@ def main():
         if len(message) != 0:
             print(message)
         if dry_run:
-            print(colored('This is a dry run. This command would have been run:', 'red'))
+            cprint('This is a dry run. This command would have been run:', 'red')
             print(command_line)
             exit(0)
         else:
