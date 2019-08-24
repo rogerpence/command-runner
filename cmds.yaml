@@ -19,6 +19,16 @@ build-image:
 composer:
   cmd: docker-compose exec -u www-data:www-data -w /var/www/html app composer {{args}}
   msg: Starting Composer
+up:
+  alias: up-local
+up-local:
+  cmd: docker-compose -f docker-compose.yml up -d
+  msg: Starting with local debug
+up-remote:
+  cmd: docker-compose -f docker-compose.yml -f docker-compose-remote-debug.yml up -d
+  msg: Starting with remote debug
+upl:
+  alias: up-local
 down:
   cmd: docker-compose down
   msg: Stopping containers
@@ -36,18 +46,6 @@ pu:
 tinker:
   cmd: docker-compose exec -u www-data:www-data -w /var/www/html app php artisan tinker
   msg: Starting Tinker
-up:
-  alias: up-local
-up-local:
-  cmd: docker-compose -f docker-compose.yml up -d
-  msg: Starting with local debug
-up-remote:
-  cmd: docker-compose -f docker-compose.yml -f docker-compose-remote-debug.yml up -d
-  msg: Starting with remote debug
-upl:
-  alias: up-local
-upr:
-  alias: up-remotex
 yarn:
   cmd: docker-compose run --rm node yarn {{args}}
   msg: Starting yarn

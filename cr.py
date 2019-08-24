@@ -6,11 +6,12 @@ from pathlib import Path
 from termcolor import colored, cprint
 import os
 import yaml
+import re
 
 # command-runner
 # by Roger Pence
-version = 'v 1.0.3'
-#   August 18, 2019
+version = 'v 1.0.4'
+date = 'August 24, 2019'
 
 """
 Copyright 2019 by Roger Pence. All rights reserved.
@@ -34,8 +35,8 @@ OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 Installation:
 
-* Confirm that you have Python3 installed
-* Install these PIP3 packages:
+* Confirm that you have Python 3 installed
+* Install these Pip 3  packages:
    - pip3 install termcolor
    - pip3 install pyyaml
    - pip3 install colorama (Windows only)
@@ -43,12 +44,30 @@ Installation:
    - sudo cp cr.py /usr/local/bin/cr
 * Make cr executable with:
    - sudo chmod +x /usr/local/bin/cr
+
+Your file names for Python 3 and pip3 may not include the '3'. Check first.
+command-runner requires Python 3.
 """
 
 
 def exit_with_error(error_message):
     print(error_message)
     exit(1)
+
+
+def confirm_command_definitions(cmds, file_name):
+    for cmd in cmds:
+        if 'alias' in cmds[cmd]:
+            continue
+        if 'cmd' not in cmds[cmd]:
+            cprint(
+                F'\'cmd\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
+            exit(1)
+
+        if 'msg' not in cmds[cmd]:
+            cprint(
+                F'\'msg\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
+            exit(1)
 
 
 def load_commands(file_name):
@@ -65,10 +84,13 @@ def load_commands(file_name):
 the file the error occurred.', 'red')
                 print(exc)
                 exit(1)
-            return cmds
+
+        confirm_command_definitions(cmds, file_name)
+
+        return cmds
 
 
-def all_args():
+def all_args(args):
     return ' '.join(args)
 
 
@@ -98,8 +120,17 @@ def replace_token(command_line, token, value):
     return command_line.replace(token, value)
 
 
-def add_cmdline_args(command_line):
-    return replace_token(command_line, '{{args}}', all_args())
+def add_cmdline_args(command_line, args):
+    command_line = replace_token(command_line, '{{args}}', all_args(args))
+
+    for i in range(0, len(args)):
+        if re.search(r'{{\d}}', command_line):
+            token = '{0}{1}{2}'.format('{{', i, '}}')
+            command_line = replace_token(command_line, token, args[i])
+
+    command_line = re.sub(r'{{\d}}', '', command_line)
+
+    return command_line
 
 
 def get_actual_command(command):
@@ -118,8 +149,10 @@ def show_help():
     print('-------------------')
     print('command-runner help')
     print('-------------------')
-    print(F'{version}')
     print('by Roger Pence')
+    print(F'{version}')
+    print(F'{date}')
+    print('https://github.com/rogerpence/command-runner')
     print('-------------------')
     print('syntax:')
     print('    dev [--dry-run|--help] command [args]')
@@ -145,8 +178,9 @@ def show_help():
             print(command + "\n  " + cmd)
 
     print('')
-    print(
-        'note: {{args}} in a command is replaced with all remaining command line args')
+    print('note: {{args}} in a command is replaced with all remaining')
+    print('command line args and {{x}} is replaced with a single command')
+    print('line argument. See the README for more details.')
 
 
 def get_commands():
@@ -178,11 +212,11 @@ def get_commands():
         exit(1)
 
 
-def main():
+def main(command, args):
     if command in cmds.keys():
         actual_command = get_actual_command(command)
         command_line = cmds[actual_command]['cmd']
-        command_line = add_cmdline_args(command_line)
+        command_line_with_args = add_cmdline_args(command_line, args)
 
         message = cmds[actual_command]['msg']
         if len(message) != 0:
@@ -190,10 +224,11 @@ def main():
         if dry_run:
             cprint('This is a dry run. \
 This command would have been run:', 'red')
-            print(command_line)
+            print(F'Raw command.......: {command_line}')
+            print(F'Procssed command..: {command_line_with_args}')
             exit(0)
         else:
-            launch_command(command_line)
+            launch_command(command_line_with_args)
             exit(0)
 
     if command.startswith('-'):
@@ -237,4 +272,4 @@ if __name__ == '__main__':
     command = args[0]
     args = pop_first_element(args)
 
-    main()
+    main(command, args)

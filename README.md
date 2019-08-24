@@ -34,32 +34,28 @@ I do use Bash aliases in some cases. But for development work, Bash aliases:
 
 ## How command-runner works
 
-command-runner commands are defined in YAML files. For example, the `up-remote` command (which launches a Docker project configured for remote debug) is defined in YAML like this: 
+command-runner commands are defined in YAML files. For example, the `tinker` command (which launches Laravel's Tinker utilty) is defined command-runner's YAML like this: 
 
-    up-remote:
-        cmd: docker-compose -f docker-compose.yml -f docker-compose-remote-debug.yml up -d
-        msg: Starting with remote debug
+    tinker:
+        cmd: docker-compose exec -w /var/www/html app php artisan tinker
+        msg: Starting Tinker
 
 Each command definition has a `cmd` key that defines the command and a `msg` key that shows a short message when the command runs.        
 
-Enter the `cmd` as you would enter it on the command line. Use the macro `{{args}}` to collect command line arguments and present them in the command at runtime. For example, given this command definition:
+Using this command line: 
 
-    myls: 
-        cmd: ls {{args}}
-        msg: Silly exmaple to show args. 
-        
-this command line:
+    cr tinker
 
-    cr myls -l -t -r
-    
-results in this command line:
+resolves to this command line:
 
-    ls -l -t -r    
+    docker-compose exec -w /var/www/html app php artisan tinker
+
+> See the 'Additional command line arguments' section below for more info on how to use {{args}} and its cousin {{x}} to define flexible command lines.
     
 command-runner also lets you create alias commands. For example, create an alias for the `up-remote` command with a single `alias` key as shown below:
 
     upr: 
-        alias: up-remote 
+        alias: up-remote               
 
 > Do not start command names with __ (double underscore). That pattern is reserved for special-case commands that may later be implemented. 
         
@@ -84,7 +80,7 @@ The command line syntax is:
 
     dev [--dry-run|--help] command [args]
 
-where `command` is a command defined in one of the two command definition files. `[args]` is any number of command line arguments to be passed using the {{{args}} macro. 
+where `command` is a command defined in one of the two command definition files. `[args]` is any number of additional command line arguments (see the next section on additional command line arguments).
 
 * the optional `--dry-run` flag shows the command line that would be run
 
@@ -98,6 +94,54 @@ where `command` is a command defined in one of the two command definition files.
 
 <small>command-runner's --dry-run to show what command would be submitted</small>
     
+## Additional command line arguments
+
+Additional command line arguments can be appended to command-runner's command line with the `{{args}}` or `{{x}}` tokens. 
+
+> The `--dry-run` option is your friend as you're creating and testing command-runner commands with replacement command line arguments. 
+
+* **{{args}}** - resolves to all of the command line arguments to the command. For example, if the command-runner cmd is:
+
+        dcr:
+            cmd: docker-compose run --rm node npm {{args}}
+
+    Using this command line.
+
+        dcr init - y 
+
+    resolves to this command line:
+
+        docker-compose run --rm node npm init -y 
+
+    Use `{{args}}` where the number of command line arguments varies.        
+
+* **{{x}}** - resolves to a single command line argument where `x` is its zero-based ordinal command line position. For example, if the command-runner command is:
+
+        git-tag:
+            cmd: git-tag -a {{0}} -m'{{1}}'
+
+    Using this command line:        
+
+        cr git-tag v2.0.1 'Version 2.0.1. Summer 2019'
+
+    resolves to this command line:        
+
+        git tag -a v2.0.1 -m'Version 2.0.1. Summer 2019'
+
+    Note that additional command line arguments after the command-runner command are zero-based. The `v2.0.1` value following the command-runner command `git-tag` above is the zeroth command line argument to command-runner. 
+
+    Also, be sure to put apostrophes around command line arguments with embedded spaces.
+
+    Use `{{x}}` tokens where the number of command line arguments is explicit.
+
+    > If runtime command line arguments are provided at runtime without correponding `{{x}}` placeholders those arguments are ignored. If command line arguments are not provided at runtime for a given `{{x}}` token, those tokens are removed from the resulting command line. 
+
+
+
+
+
+
+
 ## Beware using command lines with redirection
 
 A command line with redirection like this doesn't work with Python's subprocess.call:
