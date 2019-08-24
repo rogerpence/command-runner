@@ -8,9 +8,13 @@ command-runner is a Python script that provides a short-cut mechanism for runnin
 
     docker-compose -f docker-compose.yml -f docker-compose-remote-debug.yml up -d
 
-I need to do this a lot! command-runner reduces it to:
+I need to do this a lot. command-runner reduces it to:
 
     cr up-remote
+
+or, using command-runner's alias feature: 
+
+    cr upr
 
 ## Inspiration     
 

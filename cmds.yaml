@@ -1,5 +1,5 @@
 ---
-deploy-command-runner: 
+deploy-command-runner:
   cmd: sudo cp cr.py /usr/local/bin/cr
   msg: Copy cr.py to /usr/local/bin/cr
 artisan:
@@ -12,7 +12,8 @@ bash-root:
   cmd: docker-compose exec -w /var/www/html app bash
   msg: Starting Bash as user (must use 'up first')
 build-image:
-  cmd: docker build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id
+  cmd:
+    docker build --build-arg USER_ID=$(id -u ${USER}) --build-arg GROUP_ID=$(id
     -g ${USER}) -t rp:laravel -f ./app-dockerfile .
   msg: Build image
 composer:
