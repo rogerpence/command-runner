@@ -87,6 +87,10 @@ the file the error occurred.', 'red')
 
         confirm_command_definitions(cmds, file_name)
 
+        # Add filename key to commands.
+        for cmd in cmds:
+            cmds[cmd]['filename'] = file_name
+
         return cmds
 
 
@@ -177,7 +181,14 @@ def show_help(cmds, verbose=True):
             max_key_len = len(key)
 
     for key in cmds:
+        # I'm not sure if this is a good idea or not.
+        # if 'global' in cmds[key]['filename']:
+        #     command = colored(key, 'white')
+        # else:
+        #     command = colored(key, 'blue')
+
         command = colored(key, 'blue')
+
         if 'alias' in cmds[key]:
             alias = cmds[key]['alias']
             text = colored(alias, 'blue')

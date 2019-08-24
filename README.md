@@ -125,7 +125,7 @@ Additional command line arguments can be appended to command-runner's command li
         dcr:
             cmd: docker-compose run --rm node npm {{args}}
 
-    Using this command line.
+    Using this command-runner command definition:
 
         dcr init - y 
 
@@ -140,7 +140,7 @@ Additional command line arguments can be appended to command-runner's command li
         git-tag:
             cmd: git-tag -a {{0}} -m'{{1}}'
 
-    Using this command line:        
+    Using this command-runner command definition:
 
         cr git-tag v2.0.1 'Version 2.0.1. Summer 2019'
 

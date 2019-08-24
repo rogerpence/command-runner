@@ -1,4 +1,8 @@
 ---
+#
+# This command-runner command definition file is intended mostly
+# for Laravel development on Docker.
+#
 deploy-command-runner:
   cmd: sudo cp cr.py /usr/local/bin/cr
   msg: Copy cr.py to /usr/local/bin/cr
