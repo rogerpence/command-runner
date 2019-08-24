@@ -100,6 +100,7 @@ The command line syntax is:
 
         cr --search | -s search-value
 
+    Search looks at both the command name and its command.        
 
     dev [--dry-run|--help] command [args]
 

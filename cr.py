@@ -268,7 +268,8 @@ def search_commands(cmds):
     for cmd in cmds:
         if 'alias' in cmds[cmd]:
             continue
-        if scope in cmds[cmd]['cmd']:
+        # Search in command name and command.
+        if scope in cmd + cmds[cmd]['cmd']:
             scoped_commands[cmd] = cmds[cmd]
 
     if len(scoped_commands) == 0:
