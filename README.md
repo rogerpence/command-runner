@@ -104,7 +104,6 @@ The command line syntax is:
 
     dev [--dry-run|--help] command [args]
 
-
 <!--
 ![command-runner help panel](https://rogerpence.com/storage/images/cr-help.2458714.65639.png?1)
 
@@ -112,9 +111,9 @@ The command line syntax is:
 
 ![command-runner dry run](https://rogerpence.com/storage/images/cr-dry-run.2458714.65624.png?1)
 
-<small>command-runner's --dry-run to show what command would be submitted</small>
-    
--->        
+<small>command-runner's --dry-run to show what command would be submitted</small>    
+-->   
+
 ## Additional command line arguments
 
 Additional command line arguments can be appended to command-runner's command line with the `{{args}}` or `{{x}}` tokens. 

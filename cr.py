@@ -10,7 +10,7 @@ import re
 
 # command-runner
 # by Roger Pence
-version = 'v 1.0.5'
+version = 'v 1.0.6'
 date = 'August 24, 2019'
 
 """
