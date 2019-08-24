@@ -1,8 +1,8 @@
 ## command-runner
 
----
-
 Run frequently-repeated and verbose command lines quickly. 
+
+---
 
 command-runner is a Python script that provides a short-cut mechanism for running verbose command lines quickly. For example, docker-compose does a great job of orchestrating Docker but its use often imposes long, verbose command lines. Consider this command line to launch docker-compose:
 
@@ -26,11 +26,13 @@ Over time, through, I brewed myself a righteous mess with these special-case Bas
 
 I do use Bash aliases in some cases. But for development work, Bash aliases: 
 
-* impose too much friction (you need to source the profile file after changing it) 
+* Aliases impose too much friction to create (you need to source the profile file after changing it) 
 
-* you can't have project-specific Bash aliases
+* You can't have project-specific Bash aliases.
 
-* Bash aliases don't expose themselves easily. command-runner's help panel quickly shows you the commands available 
+* Aliases don't expose themselves easily--you have to know they are. command-runner's help panel quickly shows you the commands available. 
+
+* Aliases can't be searched. command-runner makes it easy to search for text in your commands. 
 
 ## How command-runner works
 
@@ -60,6 +62,7 @@ command-runner also lets you create alias commands. For example, create an alias
 > Do not start command names with __ (double underscore). That pattern is reserved for special-case commands that may later be implemented. 
         
 ## command-runner command definition YAML files        
+
 command-runner recogizes two YAML command definition files: 
 
 * A global command definition file in 
@@ -76,16 +79,32 @@ At least one of these files must be present for command-runner to run. There are
 
 ## command-runner's command line
 
-The command line syntax is:
+The command line syntax is: 
+
+
+* Run a command
+
+        cr command [args]
+
+* Test a command         
+
+        cr --dry-run | -d command [args]
+
+    where `command` is a command defined in one of the two command definition files. `[args]` is any number of additional command line arguments (see the next section on additional command line arguments).
+
+* Show all commands        
+
+        cr --help | -h (or just 'cr'
+
+* Search commands
+
+        cr --search | -s search-value
+
 
     dev [--dry-run|--help] command [args]
 
-where `command` is a command defined in one of the two command definition files. `[args]` is any number of additional command line arguments (see the next section on additional command line arguments).
 
-* the optional `--dry-run` flag shows the command line that would be run
-
-* optional `--help` flag (or no arguments) shows a little help panel and command list.
-
+<!--
 ![command-runner help panel](https://rogerpence.com/storage/images/cr-help.2458714.65639.png?1)
 
 <small>command-runner's help panel/command list</small>
@@ -94,6 +113,7 @@ where `command` is a command defined in one of the two command definition files.
 
 <small>command-runner's --dry-run to show what command would be submitted</small>
     
+-->        
 ## Additional command line arguments
 
 Additional command line arguments can be appended to command-runner's command line with the `{{args}}` or `{{x}}` tokens. 
@@ -135,11 +155,6 @@ Additional command line arguments can be appended to command-runner's command li
     Use `{{x}}` tokens where the number of command line arguments is explicit.
 
     > If runtime command line arguments are provided at runtime without correponding `{{x}}` placeholders those arguments are ignored. If command line arguments are not provided at runtime for a given `{{x}}` token, those tokens are removed from the resulting command line. 
-
-
-
-
-
 
 
 ## Beware using command lines with redirection

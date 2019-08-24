@@ -10,7 +10,7 @@ import re
 
 # command-runner
 # by Roger Pence
-version = 'v 1.0.4'
+version = 'v 1.0.5'
 date = 'August 24, 2019'
 
 """
@@ -61,12 +61,12 @@ def confirm_command_definitions(cmds, file_name):
             continue
         if 'cmd' not in cmds[cmd]:
             cprint(
-                F'\'cmd\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
+                f'\'cmd\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
             exit(1)
 
         if 'msg' not in cmds[cmd]:
             cprint(
-                F'\'msg\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
+                f'\'msg\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
             exit(1)
 
 
@@ -138,27 +138,38 @@ def get_actual_command(command):
         alias_command = cmds[command]['alias']
         if not alias_command in cmds:
             cprint(
-                F'aliased command \'{alias_command}\' is not defined.', 'red')
+                f'aliased command \'{alias_command}\' is not defined.', 'red')
             exit(1)
         return alias_command
     else:
         return command
 
 
-def show_help():
-    print('-------------------')
-    print('command-runner help')
-    print('-------------------')
-    print('by Roger Pence')
-    print(F'{version}')
-    print(F'{date}')
-    print('https://github.com/rogerpence/command-runner')
-    print('-------------------')
-    print('syntax:')
-    print('    dev [--dry-run|--help] command [args]')
-    print('    optional --dry-run flag shows the command that would be run')
-    print('    optional --help flag (or no arguments) shows this help list')
-    print('    commands are shown below in blue:')
+def show_help(cmds, verbose=True):
+    if verbose:
+        print('-------------------')
+        print('command-runner help')
+        print('-------------------')
+        print(    # scope = sys.argv[1]
+            # scoped_cmds = {key: value for (
+            #     key, value) in cmds.items() if key.startswith(scope)}
+            # show_help(scoped_cmds, verbose=False)
+
+            'by Roger Pence')
+        print(f'{version}')
+        print(f'{date}')
+        print('https://github.com/rogerpence/command-runner')
+        print('-------------------')
+        print('Run command:')
+        print('    cr command [args]')
+        print('Test a command:')
+        print('    cr --dry-run | -d command [args]')
+        print('Show all commands:')
+        print('    cr --help | -h (or just \'cr\')')
+        print('To search commands for text:')
+        print('    cr --search | -s search-text')
+        print('')
+        print('Commands are shown below in blue:')
 
     max_key_len = 0
     for key in cmds:
@@ -177,10 +188,11 @@ def show_help():
             cmd = colored(cmd, 'yellow')
             print(command + "\n  " + cmd)
 
-    print('')
-    print('note: {{args}} in a command is replaced with all remaining')
-    print('command line args and {{x}} is replaced with a single command')
-    print('line argument. See the README for more details.')
+    if verbose:
+        print('')
+        print('note: {{args}} in a command is replaced with all remaining')
+        print('command line args and {{x}} is replaced with a single command')
+        print('line argument. See the README for more details.')
 
 
 def get_commands():
@@ -222,10 +234,10 @@ def main(command, args):
         if len(message) != 0:
             print(message)
         if dry_run:
-            cprint('This is a dry run. \
+            cprint('\nThis is a dry run. \
 This command would have been run:', 'red')
-            print(F'Raw command.......: {command_line}')
-            print(F'Procssed command..: {command_line_with_args}')
+            print(f'Command in YAML file..: {command_line}')
+            print(f'Procssed command......: {command_line_with_args}')
             exit(0)
         else:
             launch_command(command_line_with_args)
@@ -237,6 +249,24 @@ This command would have been run:', 'red')
         msg = 'command not found'
     print(colored(command, 'red') + ' ' + msg)
     print('dev --help to show syntax and available commands')
+
+
+def search_commands(cmds):
+    scoped_commands = {}
+    scope = sys.argv[1]
+    for cmd in cmds:
+        if 'alias' in cmds[cmd]:
+            continue
+        if scope in cmds[cmd]['cmd']:
+            scoped_commands[cmd] = cmds[cmd]
+
+    if len(scoped_commands) == 0:
+        cprint(f'No commands were found containing \'{scope}\'', 'red')
+        exit(0)
+
+    cprint(f'Commands found containing \'{scope}\':', 'blue')
+
+    show_help(scoped_commands, verbose=False)
 
 
 if __name__ == '__main__':
@@ -256,18 +286,22 @@ if __name__ == '__main__':
     dry_run = False
 
     if no_command_line_args_provided():
-        show_help()
+        show_help(cmds)
         exit(0)
 
-    if sys.argv[1] == '--help':
-        show_help()
+    if sys.argv[1] == '--help' or sys.argv[1] == '-h':
+        show_help(cmds)
         exit(0)
 
     args = pop_first_element(sys.argv)  # Program name is first arg.
 
-    if args[0] == '--dry-run':
+    if args[0] == '--dry-run' or args[0] == '-d':
         dry_run = True
         args = pop_first_element(args)
+
+    if args[0] == '--search' or args[0] == '-s':
+        search_commands(cmds)
+        exit()
 
     command = args[0]
     args = pop_first_element(args)
