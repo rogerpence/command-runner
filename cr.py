@@ -7,10 +7,11 @@ from termcolor import colored, cprint
 import os
 import yaml
 import re
+from pprint import pprint
 
 # command-runner
 # by Roger Pence
-version = 'v 1.0.6'
+version = 'v 1.0.8'
 date = 'August 24, 2019'
 
 """
@@ -89,7 +90,7 @@ the file the error occurred.', 'red')
 
         # Add filename key to commands.
         for cmd in cmds:
-            cmds[cmd]['filename'] = file_name
+            cmds[cmd]['filename'] = 'global' if 'global' in file_name else 'local'
 
         return cmds
 
@@ -168,12 +169,15 @@ def show_help(cmds, verbose=True):
         print('To search commands for text:')
         print('    cr --search | -s search-text')
         print('')
-        print('Commands are shown below in blue:')
+        print('Global commands are prefixed with an asterisk.')
 
     max_key_len = 0
     for key in cmds:
         if len(key) > max_key_len:
             max_key_len = len(key)
+
+    global_command_count = 0
+    local_command_count = 0
 
     for key in cmds:
         # I'm not sure if this is a good idea or not.
@@ -182,7 +186,14 @@ def show_help(cmds, verbose=True):
         # else:
         #     command = colored(key, 'blue')
 
-        command = colored(key, 'blue')
+        if cmds[key]['filename'] == 'global':
+            command = '*' + key
+            global_command_count += 1
+        else:
+            command = key
+            local_command_count += 1
+
+        command = colored(command, 'blue')
 
         if 'alias' in cmds[key]:
             alias = cmds[key]['alias']
@@ -195,10 +206,8 @@ def show_help(cmds, verbose=True):
             print(command + "\n  " + cmd)
 
     if verbose:
-        print('')
-        print('note: {{args}} in a command is replaced with all remaining')
-        print('command line args and {{x}} is replaced with a single command')
-        print('line argument. See the README for more details.')
+        print(f'Global commands: {global_command_count} \
+Local commands: {local_command_count}')
 
 
 def get_commands():

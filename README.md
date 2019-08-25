@@ -94,7 +94,7 @@ The command line syntax is:
 
 * Show all commands        
 
-        cr --help | -h (or just 'cr'
+        cr --help | -h (or just 'cr')
 
 * Search commands
 
