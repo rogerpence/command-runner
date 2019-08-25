@@ -213,7 +213,6 @@ def get_commands():
         local_cmds = load_commands('cmds.yaml')
 
     global_commands_file_name = os.path.join(home_path, 'global-commands.yaml')
-    print('---' + global_commands_file_name)
 
     if os.path.isfile(global_commands_file_name):
         global_cmds = load_commands(global_commands_file_name)
@@ -263,8 +262,15 @@ This command would have been run:', 'red')
 
 
 def search_commands(cmds):
+    if len(sys.argv) == 1:
+        cprint('Search argument is missing.', 'red')
+        cprint('Use this command line to search:', 'red')
+        cprint('    cr -s <search-value>', 'red')
+        exit(1)
+
     scoped_commands = {}
     scope = sys.argv[1]
+
     for cmd in cmds:
         if 'alias' in cmds[cmd]:
             continue
