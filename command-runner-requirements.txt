@@ -1,0 +1,17 @@
+# PIP package requirements for command-runner. 
+#
+# Use:
+# pip3 install -r command-runner-requirements.txt
+#
+# Your Pip package may not be named pip3. Use 
+#   pip3 --version to see.
+# You may need to use pip (without the 3).
+#
+# Uncomment `colorama` line for Windows. 
+
+termcolor >= 1.1.0
+PyYAML >= 5.1.2
+# Windows only
+# colorama >= 0.4.1
+
+

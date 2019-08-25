@@ -1,0 +1,34 @@
+---
+octal:
+  cmd: stat -c "%a %n" {{args}}
+  msg: Show octal rights on a file or directory.
+
+show-path:  
+  cmd: echo $PATH | tr ":" "\n" | nl
+  msg: Show path as a list.
+
+myls:
+  cmd: ls {{args}}
+  msg: Silly exmaple to show args.
+
+git-first-init:
+  cmd: git init && git cm 'Initial commit'
+  msg: Create git repo and make initial commit.
+  # This uses Phil Haack's cm git alias.
+  # https://haacked.com/archive/2014/07/28/github-flow-aliases/
+
+git-push:
+  cmd: echo gitpat on clipboard && gitpat && git push
+  msg: Put Git token on clipboard then git push.
+
+git-tag:
+  cmd: git tag -a {{0}} -m'{{1}}'
+  msg: Add an annotated Git tag.
+
+edit-global:
+  cmd: vim ~/global-commands.yaml
+  msg: Edit the global-commands.yaml file.
+
+edit-local:
+  cmd: vim cmds.yaml
+  msg: Edit the local cmds.yaml file.  

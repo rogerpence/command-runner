@@ -180,12 +180,6 @@ def show_help(cmds, verbose=True):
     local_command_count = 0
 
     for key in cmds:
-        # I'm not sure if this is a good idea or not.
-        # if 'global' in cmds[key]['filename']:
-        #     command = colored(key, 'white')
-        # else:
-        #     command = colored(key, 'blue')
-
         if cmds[key]['filename'] == 'global':
             command = '*' + key
             global_command_count += 1

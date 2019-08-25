@@ -167,25 +167,37 @@ I've looked at replacing subprocess.call with subprocess.run (which may alleviat
         
 ## Installation
 
-command-runner is a single Python 3 script file with two PIP3 dependencies:
+command-runner is a single Python 2 script file with two PIP3 dependencies 
 
-* pip3 install pyYaml
-* pip3 install termcolor
+* pyYaml
+* termcolor
 
-> Depending on your Python install you may not need to include the '3' in `pip3`.
+On Windows only you'll also need 
+* colorama
+
+
+> Depending on your Python install you may not need to include the '3' in `pip3`. Use `pip3 --version` to be sure you're using the correct `pip` version. See the Python version notes below.
+
 
 To install command-runner:
 
-1. Confirm that you have Python3 installed
-1. Install these two PIP3 packages:
-   - pip3 install termcolor pyyaml
-   - pip3 install termcolor termcolor
+1. Confirm that you have Python3 installed 
+
+1. If you're using Windows, uncomment the `colorama` line in the 
+   commend-runner-requirements.txt file. 
+
+1. Use this command line to install the necessary packages:
+
+    pip3 -r command-runner-requirements.txt
+
 1. Copy cr.py to your /usr/local/bin directory with 
    - sudo cp cr.py /usr/local/bin/cr 
+
 1. Make cr executable with:
    - sudo chmod +x /usr/local/bin/cr
 
-I use command-runner mostly on my host machine. But because it's a simple, single Python script it's also easy to install into your VMs or Docker images. 
+
+## Python version info 
 
 command-runner needs Python 3. On some systems, `python` may be the name of the `python3` excutable. To confirm what your system considers the Python 3 executable to be, run
 
@@ -195,9 +207,19 @@ or
 
     python3 --version
 
+On Linux, running 
+
+    which python 
+
+or 
+
+    which python3 
+
+may also be helpful.    
+
 Once you determine what the name of your Python 3 executable is, use the corresponding version of `pip3` (ie, use `pip` for `python` and `pip3` and `python3`). 
 
-You may also need to change the [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) in the first line from `python3` to `python`.
+You may also need to change the [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) in the `cr.py` file's first line from `python3` to `python`.
 
 ## Using command-runner on Windows 
 
