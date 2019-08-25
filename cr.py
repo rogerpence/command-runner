@@ -11,7 +11,7 @@ from pprint import pprint
 
 # command-runner
 # by Roger Pence
-version = 'v 1.0.8'
+version = 'v 1.0.9'
 date = 'August 24, 2019'
 
 """
