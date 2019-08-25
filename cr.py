@@ -154,12 +154,7 @@ def show_help(cmds, verbose=True):
         print('-------------------')
         print('command-runner help')
         print('-------------------')
-        print(    # scope = sys.argv[1]
-            # scoped_cmds = {key: value for (
-            #     key, value) in cmds.items() if key.startswith(scope)}
-            # show_help(scoped_cmds, verbose=False)
-
-            'by Roger Pence')
+        print('by Roger Pence')
         print(f'{version}')
         print(f'{date}')
         print('https://github.com/rogerpence/command-runner')

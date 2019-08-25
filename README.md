@@ -116,7 +116,7 @@ The command line syntax is:
 
 ## Additional command line arguments
 
-Additional command line arguments can be appended to command-runner's command line with the `{{args}}` or `{{x}}` tokens. 
+Additional command line arguments can be inserted into a command-runner command line with the `{{args}}` or `{{x}}` tokens. 
 
 > The `--dry-run` option is your friend as you're creating and testing command-runner commands with replacement command line arguments. 
 
