@@ -3,9 +3,6 @@
 # This command-runner command definition file is intended mostly
 # for Laravel development on Docker.
 #
-deploy-command-runner:
-  cmd: sudo cp cr.py /usr/local/bin/cr
-  msg: Copy cr.py to /usr/local/bin/cr
 artisan:
   cmd: docker-compose -w /var/www/html app php artisan {{args}}
   msg: Starting Artisan

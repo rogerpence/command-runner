@@ -207,28 +207,19 @@ Local commands: {local_command_count}')
 def get_commands():
     home_path = str(Path.home())
 
-    if os.path.isfile('cmds.yaml'):
-        local_cmds = load_commands('cmds.yaml')
+    local_cmds = load_commands('cmds.yaml') if \
+        os.path.isfile('cmds.yaml') else {}
 
-    global_commands_file_name = os.path.join(home_path, 'global-commands.yaml')
+    global_fname = os.path.join(home_path, 'global-commands.yaml')
+    global_cmds = load_commands(global_fname) if \
+        os.path.isfile(global_fname) else {}
 
-    if os.path.isfile(global_commands_file_name):
-        global_cmds = load_commands(global_commands_file_name)
+    cmds = {**global_cmds, **local_cmds}
 
-    if 'local_cmds' in locals() and 'global_cmds' in locals():
-        cmds = {**global_cmds, **local_cmds}
+    if (len(cmds) > 0):
         return cmds
-
-    if 'local_cmds' in locals():
-        cmds = local_cmds
-        return cmds
-
-    if 'global_cmds' in locals():
-        cmds = global_cmds
-        return cmds
-
-    if 'local_cmds' not in locals() and 'global_cmds' not in locals():
-        print(f"'{global_commands_file_name}' or local 'cmds.yaml' not found.")
+    else:
+        cprint(f"'{global_fname}' and/or local 'cmds.yaml' not found.", 'red')
         exit(1)
 
 
@@ -292,7 +283,10 @@ if __name__ == '__main__':
     # termcolor needs colorama to work on Windows.
     # Be sure to get the colorama module with:
     # pip3 install colorama
-    if os.name == 'nt':
+    # See the GitHub README for notes on
+    # IGNORE_COLORAMA environment variable.
+
+    if os.name == 'nt' and 'IGNORE_COLORAMA' not in os.environ:
         import importlib
         import colorama
         colorama.init()

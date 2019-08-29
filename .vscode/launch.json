@@ -11,8 +11,9 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": [
-                "test-args",
-                "a"
+                "arg-test-2",
+                "crosby",
+                "stills",
             ]
         },
         {
