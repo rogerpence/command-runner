@@ -11,8 +11,8 @@ from pprint import pprint
 
 # command-runner
 # by Roger Pence
-version = 'v 1.0.9'
-date = 'August 24, 2019'
+version = 'v 1.0.10'
+date = 'September 01, 2019'
 
 """
 Copyright 2019 by Roger Pence. All rights reserved.
@@ -63,11 +63,6 @@ def confirm_command_definitions(cmds, file_name):
         if 'cmd' not in cmds[cmd]:
             cprint(
                 f'\'cmd\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
-            exit(1)
-
-        if 'msg' not in cmds[cmd]:
-            cprint(
-                f'\'msg\' key not in \'{cmd}\' in {file_name} YAML file', 'red')
             exit(1)
 
 
@@ -160,12 +155,12 @@ def show_help(cmds, verbose=True):
         print(f'{date}')
         print('https://github.com/rogerpence/command-runner')
         print('-------------------')
-        print('Run command:')
-        print('    cr command [args]')
+        print('Show all commands:')
+        print('    cr --help | cr - h | cr')
         print('Test a command:')
         print('    cr --dry-run | -d command [args]')
-        print('Show all commands:')
-        print('    cr --help | -h (or just \'cr\')')
+        print('Run command:')
+        print('    cr command [args]')
         print('To search commands for text:')
         print('    cr --search | -s search-text')
         print('')
@@ -207,12 +202,12 @@ Local commands: {local_command_count}')
 def get_commands():
     home_path = str(Path.home())
 
-    local_cmds = load_commands('cmds.yaml') if \
-        os.path.isfile('cmds.yaml') else {}
+    local_cmds = load_commands(
+        'cmds.yaml') if os.path.isfile('cmds.yaml') else {}
 
     global_fname = os.path.join(home_path, 'global-commands.yaml')
-    global_cmds = load_commands(global_fname) if \
-        os.path.isfile(global_fname) else {}
+    global_cmds = load_commands(
+        global_fname) if os.path.isfile(global_fname) else {}
 
     cmds = {**global_cmds, **local_cmds}
 
@@ -228,15 +223,18 @@ def main(command, args):
         actual_command = get_actual_command(command)
         command_line = cmds[actual_command]['cmd']
         command_line_with_args = add_cmdline_args(command_line, args)
+        if 'msg' not in cmds:
+            message = ''
+        else:
+            message = cmds[actual_command]['msg']
 
-        message = cmds[actual_command]['msg']
         if len(message) != 0:
             print(message)
         if dry_run:
             cprint('\nThis is a dry run. \
 This command would have been run:', 'red')
             print(f'Command in YAML file..: {command_line}')
-            print(f'Procssed command......: {command_line_with_args}')
+            print(f'Command would be......: {command_line_with_args}')
             exit(0)
         else:
             launch_command(command_line_with_args)
