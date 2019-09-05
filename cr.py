@@ -11,8 +11,8 @@ from pprint import pprint
 
 # command-runner
 # by Roger Pence
-version = 'v 1.0.10'
-date = 'September 01, 2019'
+version = 'v 1.0.11'
+date = 'September 04, 2019'
 
 """
 Copyright 2019 by Roger Pence. All rights reserved.
@@ -262,7 +262,11 @@ def search_commands(cmds):
         if 'alias' in cmds[cmd]:
             continue
         # Search in command name and command.
-        if scope in cmd + cmds[cmd]['cmd']:
+        # This is a bit of a hack to perform a brute-force
+        # case-insenstive search for the scope request.
+        #! Todo: Consider converting to case-insenstive dictionary
+        #! or dict comprehension.
+        if scope.lower() in cmd.lower() + cmds[cmd]['cmd'].lower():
             scoped_commands[cmd] = cmds[cmd]
 
     if len(scoped_commands) == 0:
