@@ -156,7 +156,7 @@ def show_help(cmds, verbose=True):
         print('https://github.com/rogerpence/command-runner')
         print('-------------------')
         print('Show all commands:')
-        print('    cr --help | cr - h | cr')
+        print('    cr --help | cr -h | cr')
         print('Test a command:')
         print('    cr --dry-run | -d command [args]')
         print('Run command:')
