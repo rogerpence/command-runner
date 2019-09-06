@@ -100,9 +100,7 @@ The command line syntax is:
 
         cr --search | -s search-value
 
-    Search looks at both the command name and its command.        
-
-    dev [--dry-run|--help] command [args]
+    Search looks at both the command name and its command and is case-insensitive.        
 
 <!--
 ![command-runner help panel](https://rogerpence.com/storage/images/cr-help.2458714.65639.png?1)
@@ -114,9 +112,9 @@ The command line syntax is:
 <small>command-runner's --dry-run to show what command would be submitted</small>    
 -->   
 
-## Additional command line arguments
+## Command line arguments
 
-Additional command line arguments can be inserted into a command-runner command line with the `{{args}}` or `{{x}}` tokens. 
+Command line arguments can be inserted into a command-runner command line with the `{{args}}` or `{{x}}` tokens. 
 
 > The `--dry-run` option is your friend as you're creating and testing command-runner commands with replacement command line arguments. 
 
@@ -148,14 +146,13 @@ Additional command line arguments can be inserted into a command-runner command 
 
         git tag -a v2.0.1 -m'Version 2.0.1. Summer 2019'
 
-    Note that additional command line arguments after the command-runner command are zero-based. The `v2.0.1` value following the command-runner command `git-tag` above is the zeroth command line argument to command-runner. 
+    Note that additional command line arguments after the command-runner command are _zero-based_. The `v2.0.1` value following the command-runner command `git-tag` above is the zeroth command line argument to command-runner. 
 
     Also, be sure to put apostrophes around command line arguments with embedded spaces.
 
     Use `{{x}}` tokens where the number of command line arguments is explicit.
 
     > If runtime command line arguments are provided at runtime without correponding `{{x}}` placeholders those arguments are ignored. If command line arguments are not provided at runtime for a given `{{x}}` token, those tokens are removed from the resulting command line. 
-
 
 ## Beware using command lines with redirection
 
