@@ -121,6 +121,7 @@ def replace_token(command_line, token, value):
 
 
 def add_cmdline_args(command_line, args):
+    print(f'number of args: {len(args)}')
     command_line = replace_token(command_line, '{{args}}', all_args(args))
 
     for i in range(0, len(args)):
@@ -223,12 +224,13 @@ def main(command, args):
         actual_command = get_actual_command(command)
         command_line = cmds[actual_command]['cmd']
         command_line_with_args = add_cmdline_args(command_line, args)
-        if 'msg' not in cmds:
+
+        if 'msg' not in cmds[actual_command]:
             message = ''
         else:
             message = cmds[actual_command]['msg']
 
-        if len(message) != 0:
+        if len(message) > 0:
             print(message)
         if dry_run:
             cprint('\nThis is a dry run. \
