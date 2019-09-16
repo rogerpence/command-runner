@@ -121,7 +121,6 @@ def replace_token(command_line, token, value):
 
 
 def add_cmdline_args(command_line, args):
-    print(f'number of args: {len(args)}')
     command_line = replace_token(command_line, '{{args}}', all_args(args))
 
     for i in range(0, len(args)):
